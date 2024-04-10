@@ -1,59 +1,141 @@
 class Experiment {
   // Group Details
-  static rollNos = '10983437,10983743'
-  static names = 'The Tutors(Akhtar Banga, Phul Tekchand)'
+  static rollNos = '102103171,102103167'
+  static names = 'The Codex(Sehaj, Divreet)'
 
   canvasSel = '#myCanvas'
 
   run() {
 
-    // Run the Steppers
-    // this.runSteppers()
-
-    // Hide Steppers
-    this.hideSteppers()
     canvasSetup(this.canvasSel)
 
-    // Clock
-    // --------------------------------------------------
-    const clock = new Clock(this.canvasSel)
-    // const ms = document.timeline.currentTime
-    // clock.draw(ms)
-    // clock.draw(ms+25000)
-    const clockRafFn = (ts) => {
-      clock.draw(ts)
-      window.requestAnimationFrame(clockRafFn)
+var canvas = document.getElementById('myCanvas');
+var ctx = canvas.getContext('2d');
+
+// Character properties
+var character = {
+    x: 50,
+    y: canvas.height/2,
+    width: 60,
+    height: 60,
+    speed: 9
+};
+
+// Obstacles array
+var obstacles = [];
+
+// Game state
+var gameOver = false;
+var score = 0;
+
+// Keyboard event listener
+document.addEventListener('keydown', function(event) {
+    if (!gameOver) {
+        if (event.key === 'ArrowUp' && character.y > 0) {
+            character.y -= character.speed;
+        } else if (event.key === 'ArrowDown' && character.y < canvas.height - character.height) {
+            character.y += character.speed;
+        } else if (event.key === 'ArrowLeft' && character.x > 0) {
+            character.x -= character.speed;
+        } else if (event.key === 'ArrowRight' && character.x < canvas.width - character.width) {
+            character.x += character.speed;
+        }
+    } else {
+        if (event.key === 'Enter') {
+            restartGame();
+        }
     }
-    const clockRaf = window.requestAnimationFrame(clockRafFn)
+});
+
+// Main game loop
+function gameLoop() {
+    if (!gameOver) {
+        update();
+        draw();
+        requestAnimationFrame(gameLoop);
+    }
+}
+
+// Update game state
+function update() {
+    // Create obstacles more frequently
+    if (Math.random() < 0.08) {
+        var obstacle = {
+            x: canvas.width,
+            y: Math.random() * canvas.height,
+            width: 45 + Math.random() * 50,
+            height: 45 + Math.random() * 50,
+            speed: 8 + Math.random() * 5
+        };
+        obstacles.push(obstacle);
+    }
+
+    // Move obstacles
+    for (var i = 0; i < obstacles.length; i++) {
+        obstacles[i].x -= obstacles[i].speed;
+
+        // Check collision with character
+        if (checkCollision(character, obstacles[i])) {
+            gameOver = true;
+        }
+
+        // Increment score if obstacle passes the character
+        if (obstacles[i].x + obstacles[i].width < character.x) {
+            score++;
+        }
+    }
+}
+
+// Draw game objects
+function draw() {
+    // Clear canvas
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Draw character
+    ctx.fillStyle = '#ffcc00';
+    ctx.fillRect(character.x, character.y, character.width, character.height);
+
+    // Draw obstacles
+    ctx.fillStyle = '#ff4444';
+    for (var i = 0; i < obstacles.length; i++) {
+        ctx.fillRect(obstacles[i].x, obstacles[i].y, obstacles[i].width, obstacles[i].height);
+    }
+
+    // Display score
+    ctx.fillStyle = '#fff';
+    ctx.font = '35px Arial';
+    ctx.fillText('Score: ' + score, 20, 30);
+
+    // Display game over message
+    if (gameOver) {
+        ctx.fillStyle = '#fff';
+        ctx.font = '60px Arial';
+        ctx.fillText('Game Over!', canvas.width / 2 - 120, canvas.height / 2);
+    }
+}
+
+// Check collision between two objects
+function checkCollision(obj1, obj2) {
+    return obj1.x < obj2.x + obj2.width &&
+           obj1.x + obj1.width > obj2.x &&
+           obj1.y < obj2.y + obj2.height &&
+           obj1.y + obj1.height > obj2.y;
+}
+
+// Restart game
+function restartGame() {
+    obstacles = [];
+    gameOver = false;
+    score = 0;
+    character.x = 50;
+    character.y = canvas.height / 2;
+}
+
+// Start the game loop
+gameLoop();
+
+    
     
   }
 
-  runSteppers() {
-
-    // Steppers
-    // --------------------------------------------------
-    const stepperOneRaf
-	  = window.requestAnimationFrame(stepperOne)
-
-    const stepperTwoRaf
-	  = window.requestAnimationFrame(stepperTwo)
-
-    const stepperThree = new StepperThree(
-      '#valueFromStepperThree', 15
-    )
-    const stepperThreeFn = (ts) => {
-      if (!stepperThree.isActive) stepperThree.start()
-      stepperThree.step(ts)
-      window.requestAnimationFrame(stepperThreeFn)
-    }
-    const stepperThreeRaf
-	  = window.requestAnimationFrame(stepperThreeFn)
-    // --------------------------------------------------
-    
-  }
-
-  hideSteppers() {
-    document.querySelector('#side-note')
-      .classList.add('hidden')
-  }
 }
