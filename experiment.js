@@ -12,6 +12,13 @@ class Experiment {
 var canvas = document.getElementById('myCanvas');
 var ctx = canvas.getContext('2d');
 
+
+const input = prompt("What is your name?")
+document.getElementById("player_name").innerText=`Player Name: ${input}`
+document.getElementById("player_level").innerText=`Difficulty Level: Medium`;
+
+
+
 // Character properties
 var character = {
     x: 50,
@@ -47,6 +54,9 @@ document.addEventListener('keydown', function(event) {
     }
 });
 
+
+
+
 // Main game loop
 function gameLoop() {
     if (!gameOver) {
@@ -59,6 +69,7 @@ function gameLoop() {
 // Update game state
 function update() {
     // Create obstacles more frequently
+    var obstacles_count=0;
     if (Math.random() < 0.08) {
         var obstacle = {
             x: canvas.width,
@@ -68,6 +79,8 @@ function update() {
             speed: 8 + Math.random() * 5
         };
         obstacles.push(obstacle);
+        obstacles_count++;
+       
     }
 
     // Move obstacles
