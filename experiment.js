@@ -15,6 +15,7 @@ var ctx = canvas.getContext('2d');
 
 const input = prompt("What is your name?")
 document.getElementById("player_name").innerText=`Player Name: ${input}`
+
 document.getElementById("player_level").innerText=`Difficulty Level: Medium`;
 
 
@@ -23,19 +24,19 @@ document.getElementById("player_level").innerText=`Difficulty Level: Medium`;
 var character = {
     x: 50,
     y: canvas.height/2,
-    width: 60,
+    width:60,
     height: 60,
-    speed: 9
+    speed: 11
 };
 
 // Obstacles array
 var obstacles = [];
 
-// Game state
+
 var gameOver = false;
 var score = 0;
 
-// Keyboard event listener
+
 document.addEventListener('keydown', function(event) {
     if (!gameOver) {
         if (event.key === 'ArrowUp' && character.y > 0) {
@@ -57,7 +58,6 @@ document.addEventListener('keydown', function(event) {
 
 
 
-// Main game loop
 function gameLoop() {
     if (!gameOver) {
         update();
@@ -69,14 +69,14 @@ function gameLoop() {
 // Update game state
 function update() {
     // Create obstacles more frequently
-    var obstacles_count=0;
+    var obstacles_count=0; 
     if (Math.random() < 0.08) {
         var obstacle = {
             x: canvas.width,
             y: Math.random() * canvas.height,
-            width: 45 + Math.random() * 50,
-            height: 45 + Math.random() * 50,
-            speed: 8 + Math.random() * 5
+            width: 40 + Math.random() * 50,
+            height: 40 + Math.random() * 50,
+            speed: 6 + Math.random() * 5
         };
         obstacles.push(obstacle);
         obstacles_count++;
@@ -99,9 +99,9 @@ function update() {
     }
 }
 
-// Draw game objects
+// Game objects
 function draw() {
-    // Clear canvas
+  
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     // Draw character
@@ -127,7 +127,7 @@ function draw() {
     }
 }
 
-// Check collision between two objects
+
 function checkCollision(obj1, obj2) {
     return obj1.x < obj2.x + obj2.width &&
            obj1.x + obj1.width > obj2.x &&
@@ -135,7 +135,7 @@ function checkCollision(obj1, obj2) {
            obj1.y + obj1.height > obj2.y;
 }
 
-// Restart game
+
 function restartGame() {
     obstacles = [];
     gameOver = false;
@@ -144,11 +144,8 @@ function restartGame() {
     character.y = canvas.height / 2;
 }
 
-// Start the game loop
-gameLoop();
 
-    
-    
+gameLoop();
   }
 
 }
