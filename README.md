@@ -14,3 +14,7 @@ https://github.com/SehajKohli1807/CG-project/assets/109986103/b6392eaa-1550-45db
 ## Website Link:
 
 https://sehajkohli1807.github.io/Collision-Game/
+
+## Documentation:
+
+https://sites.google.com/thapar.edu/collision-game/home?authuser=1
